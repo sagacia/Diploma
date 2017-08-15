@@ -1,0 +1,32 @@
+/*
+.dropdown .subdropdown{
+	display: none;
+}
+
+.social-icons ul li a img{
+    width: 30px;
+}
+.social-icons ul li a {
+    padding-top: 0px;
+    padding-bottom: 0px;
+    padding-left: 1px;
+    padding-right: 1px;
+    word-wrap: break-word;
+    width: 30px;
+}
+.social-icons ul li a i{
+    word-wrap: break-word;
+    white-space: pre-wrap;
+}
+.social-icons ul li {
+        padding: 2px;
+}
+col-sm-6 li{
+    width: 30%; 
+}
+li a{
+    width:100%;
+}
+li img{
+    width: 30px;
+}*/

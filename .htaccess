@@ -1,0 +1,23 @@
+#addDefaultCharset utf8
+
+#RewriteEngine on
+
+#RewriteCond %{REQUEST_FILENAME} !-f
+#RewriteCond %{REQUEST_FILENAME} !-d
+# Otherwise forward it to index.php
+#RewriteRule . index.php
+
+
+
+Options +FollowSymLinks
+IndexIgnore */*
+RewriteEngine on
+ 
+# Если запрос не начинается с web, добавляем его
+RewriteCond %{REQUEST_URI} !^/(web)
+RewriteRule (.*) /web/$1
+ 
+# Если файл или каталог не существует, идём к /web/index.php 
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule . /web/index.php
