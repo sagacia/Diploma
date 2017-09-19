@@ -28,22 +28,26 @@ class DwController extends Controller {
         ];
     }
 
-    /**
-     * Lists all Dw models.
-     * @return mixed
-     */
     public function actionCalcseg() {
         $start = Yii::$app->request->get('datestart');
         $end = Yii::$app->request->get('dateend');
         $interval = Yii::$app->request->get('interval');
 //        debug($start);
 //        debug($end);
-//        debug($interval);
-        if(!isset($start)||!isset($end)||!isset($interval))
-        return $this->render('calcform');
-        
-        $query = \Yii::$app->db->createCommand("CALL calculateSegments('".$start."','".$end."',".$interval.")")
-              ->execute();
+        debug($interval);
+        if ($start > $end) {
+            Yii::$app->session->setFlash('notification', 'Конечная дата не может быть больше начальной');
+              return $this->render('calcform', compact('start', 'end', 'interval'));
+
+        }
+        if (!isset($start) || !isset($end) || !isset($interval)) {
+            debug($start);
+//  return $this->render('calcform', compact('start', 'end', 'interval'));
+            return $this->render('calcform', ['start'=>$start, 'end'=>$end, 'interval'=>$interval]);
+        }
+
+        $query = \Yii::$app->db->createCommand("CALL calculateSegments('" . $start . "','" . $end . "'," . $interval . ")")
+                ->execute();
 
         return $this->render('calc', compact('res'));
     }
