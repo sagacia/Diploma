@@ -7,7 +7,7 @@ use yii\helpers\Html;
 ?>
 
 <?php foreach ($products as $product): ?>
-    <p><a href="<?= yii\helpers\Url::to(['product/view', 'id' => $product->product_id]) ?>"><?= $product->product_name ?></a></p>
+    <p><a href="<?= yii\helpers\Url::to(['product/view', 'id' => $product->id]) ?>"><?= $product->name ?></a></p>
 
 
 <?php endforeach; ?>

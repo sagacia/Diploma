@@ -14,8 +14,8 @@
             <tbody>
                 <?php foreach ($session['cart'] as $id => $item) : ?>
                     <tr>
-                        <td><?= yii\helpers\Html::img("@web/images/products/{$item['img']}", ['alt' => $item['name'], 'height' => 50]); ?></td>
-                        <td> <a href="<?= \yii\helpers\Url::to(['@web/product/view', 'id' => $id]);?>"><?= $item['name'] ?></a></td>
+                        <td><?= yii\helpers\Html::img($item['img'], ['alt' => $item['name'], 'height' => 50]); ?></td>
+                        <td>  <a href="<?= \yii\helpers\Url::to(['@web/product/view', 'id' => $id]);?>"><?= $item['name'] ?></a></td>
                         <td style="text-align: center"><?= $item['qty'] ?></td>
                         <td style="text-align: center"><?= $item['price'] ?></td>
                         <td style="text-align: center"><?= $item['qty'] * $item['price'] ?></td>

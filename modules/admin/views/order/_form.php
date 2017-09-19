@@ -16,9 +16,9 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'updated_at')->textInput(['readonly' =>true]) ?>
 
-    <?= $form->field($model, 'qty')->textInput() ?>
+    <?= $form->field($model, 'qty')->textInput(['readonly' =>true]) ?>
 
-    <?= $form->field($model, 'sum')->textInput() ?>
+    <?= $form->field($model, 'sum')->textInput(['readonly' =>true]) ?>
 
     <?= $form->field($model, 'status')->dropDownList([ '0'=>'Активен', '1'=>'В обработке', '2'=>'Доставлен', ], ['prompt' => '']) ?>
 

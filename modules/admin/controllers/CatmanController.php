@@ -45,7 +45,7 @@ class CatmanController extends AppAdminController {
         $wproducts = WatsonsProduct::find()
                 ->where(['like', 'name', $srch])
                 ->orWhere(['id' => $srch])
-                ->limit(15)
+                ->limit(50)
                 ->all();
 
         $this->layout = false;

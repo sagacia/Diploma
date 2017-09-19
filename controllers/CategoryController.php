@@ -83,8 +83,8 @@ class CategoryController extends AppController {
 
     public function actionSearch() {
         $srch = Yii::$app->request->get('srch');
-        $query = Product::find()->where(['like', 'product_name', $srch])->orWhere(['product_id' => $srch]);
-        //$query = Product::find()->where(['product_id' => $srch]);
+        $query = Product::find()->where(['like', 'name', $srch])->orWhere(['id' => $srch]);
+        //$query = Product::find()->where(['id' => $srch]);
 
         $pages = new Pagination(['totalCount' => $query->count(),
             'pageSize' => 12,
@@ -99,10 +99,8 @@ class CategoryController extends AppController {
         $srch = Yii::$app->request->get('search');
 
         //return $srch;
-        //$query = Product::find()->where(['like', 'product_name', $srch])->orWhere(['product_id' => $srch])->all();
-        $products = Product::find()->where(['like', 'product_name', $srch])->orWhere(['product_id' => $srch])->limit(10)->all();
-
-       
+        //$query = Product::find()->where(['like', 'product_name', $srch])->orWhere(['id' => $srch])->all();
+        $products = Product::find()->where(['like', 'name', $srch])->orWhere(['id' => $srch])->limit(10)->all();
 //        if ($query) {
 //            
 //            foreach ($query as $q) {
@@ -114,7 +112,6 @@ class CategoryController extends AppController {
               //  return $srchRes;
        // return;
         $this->layout=false;
-
          return $this->render('livesearch', compact('products'));
     }
 

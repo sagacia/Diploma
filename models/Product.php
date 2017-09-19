@@ -18,26 +18,32 @@ use Yii;
  * @property Brand $brand
  * @property Category $category
  */
-class Product extends \yii\db\ActiveRecord
-{
-    /**
-     * @inheritdoc
-     */
-    public static function tableName()
-    {
+class Product extends \yii\db\ActiveRecord {
+
+    public $image;
+    public $gallery;
+
+    public function behaviors() {
+        return [
+            'image' => [
+                'class' => 'rico\yii2images\behaviors\ImageBehave',
+            ]
+        ];
+    }
+
+    public static function tableName() {
         return 'product';
     }
 
     /**
      * @inheritdoc
      */
-    public function rules()
-    {
+    public function rules() {
         return [
             [['category_id', 'brand_id', 'product_name'], 'required'],
             [['category_id', 'brand_id'], 'integer'],
             [['price'], 'number'],
-            [['product_name', 'img', 'description'], 'string', 'max' => 255],
+            [['name', 'img', 'description'], 'string', 'max' => 255],
             [['brand_id'], 'exist', 'skipOnError' => true, 'targetClass' => Brand::className(), 'targetAttribute' => ['brand_id' => 'brand_id']],
             [['category_id'], 'exist', 'skipOnError' => true, 'targetClass' => Category::className(), 'targetAttribute' => ['category_id' => 'cat_id']],
         ];
@@ -46,10 +52,9 @@ class Product extends \yii\db\ActiveRecord
     /**
      * @inheritdoc
      */
-    public function attributeLabels()
-    {
+    public function attributeLabels() {
         return [
-            'product_id' => 'Product ID',
+            'id' => 'Product ID',
             'category_id' => 'Category ID',
             'brand_id' => 'Brand ID',
             'product_name' => 'Product Name',
@@ -62,16 +67,15 @@ class Product extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getBrand()
-    {
+    public function getBrand() {
         return $this->hasOne(Brand::className(), ['brand_id' => 'brand_id']);
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getCategory()
-    {
+    public function getCategory() {
         return $this->hasOne(Category::className(), ['cat_id' => 'category_id']);
     }
+
 }

@@ -8,6 +8,7 @@ use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use app\modules\admin\models\OrderItems;
 
 /**
  * OrderController implements the CRUD actions for Order model.
@@ -51,16 +52,16 @@ class OrderController extends Controller {
 //                ],
 //            ],
 //        ]);
-        
-           $dataProvider = new ActiveDataProvider([
+
+        $dataProvider = new ActiveDataProvider([
             'query' => Order::find(),
             'pagination' => [
                 'pageSize' => 17,
             ],
             'sort' => $sort
         ]);
-           
-           
+
+
         return $this->render('index', [
                     'dataProvider' => $dataProvider,
         ]);
@@ -140,6 +141,17 @@ class OrderController extends Controller {
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
         }
+    }
+
+    public function actionDelOrderItem($order_id, $product_id) {
+        //return 'ok';
+        $model = $this->findModel($order_id);
+        $items = $model->orderItems;
+        
+        $item = OrderItems::find()->where(['product_id'=>$product_id, 'order_id'=>$order_id])->one();
+        $res=$item->delete();
+        return $res;
+
     }
 
 }

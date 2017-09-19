@@ -57,14 +57,11 @@ AppAsset::register($this);
                     <span  class="icon-bar"></span>
                     <span  class="icon-bar"></span>
                 </button>
-                <a href="#" class="navbar-brand">Koсмо</a>
+                <a href="<?= \yii\helpers\Url::home() ?>" class="navbar-brand">Koсмо</a>
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav navbar-right">
-                    <li class="active"><a href="#">Компания</a></li>
-                    <li ><a href="#">Управление</a></li>
                     <li ><a href="#">Каталог</a></li>
-                    <li ><a href="#">Дисконтная программа</a></li>
                     <li ><a href="#">Магазины</a></li>
                     <?php if (!Yii::$app->user->isGuest): ?>
                         <li > 
@@ -81,7 +78,6 @@ AppAsset::register($this);
                     <?php else: ?>
                         <li ><a href="<?= yii\helpers\Url::to(['site/login']) ?>">Вход</a></li>
                     <?php endif; ?>
-                    <li><a href="<?= yii\helpers\Url::to(['/site/logout']) ?>">выйти</a></li>
                     <li ><a href="#"><i class="fa fa-envelope-o" aria-hidden="true"></i></a></li>
                 </ul>
             </div>

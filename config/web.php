@@ -7,7 +7,7 @@ $config = [
     'id' => 'basic',
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
-    'language'=>'ru',
+    'language' => 'ru',
     'components' => [
         'authManager' => [
             'class' => 'yii\rbac\DbManager', // or use 'yii\rbac\DbManager'
@@ -61,7 +61,20 @@ $config = [
     'modules' => [
         'admin' => [
             'class' => 'app\modules\admin\Module',
-            'defaultRoute'=> 'order/index'
+            'defaultRoute' => 'order/index'
+        ],
+        'crm' => [
+            'class' => 'app\modules\crm\Module',
+        ],
+        'yii2images' => [
+            'class' => 'rico\yii2images\Module',
+            //be sure, that permissions ok 
+            //if you cant avoid permission errors you have to create "images" folder in web root manually and set 777 permissions
+            'imagesStorePath' => 'upload/store', //path to origin images
+            'imagesCachePath' => 'upload/cache', //path to resized copies
+            'graphicsLibrary' => 'GD', //but really its better to use 'Imagick' 
+            'placeHolderPath' => '@webroot/upload/store/no-img.png', // if you want to get placeholder when image not exists, string will be processed by Yii::getAlias
+            'imageCompressionQuality' => 100, // Optional. Default value is 85.
         ],
         'rbac' => [
             'class' => 'mdm\admin\Module',
@@ -75,7 +88,7 @@ $config = [
             ],
             'layout' => 'left-menu',
             'mainLayout' => '@app/views/layouts/admin.php',
-        ]
+        ],
     ],
     'as access' => [
         'class' => 'mdm\admin\components\AccessControl',
@@ -84,10 +97,30 @@ $config = [
             'category/*',
             'product/*',
             'cart/*',
-           
-            'admin/*',
-            'rbac/*',
-           
+            'yii2images/*',
+            //'admin/*',
+            //'rbac/*',
+        ]
+    ],
+    'controllerMap' => [
+        'elfinder' => [
+            'class' => 'mihaildev\elfinder\PathController',
+            'access' => ['@'],
+            'root' => [
+                'baseUrl' => '@web',
+                'basePath' => '@webroot',
+                'path' => 'upload/global',
+                'name' => 'Global'
+            ],
+//            'watermark' => [
+//                'source' => __DIR__ . '/logo.png', // Path to Water mark image
+//                'marginRight' => 5, // Margin right pixel
+//                'marginBottom' => 5, // Margin bottom pixel
+//                'quality' => 95, // JPEG image save quality
+//                'transparency' => 70, // Water mark image transparency ( other than PNG )
+//                'targetType' => IMG_GIF | IMG_JPG | IMG_PNG | IMG_WBMP, // Target image formats ( bit-field )
+//                'targetMinPixel' => 200         // Target image minimum pixel size
+//            ]
         ]
     ],
     'params' => $params,

@@ -3,15 +3,59 @@
 //    alert('main');
 //});
 
-/**/
+
+
+
+
+
+/*удаление товаров админом из заказа*/
+$('.del-item-order').on('click', function (e) {
+    //e.preventDefault();
+    var url = '/admin/order/del-order-item';
+    var productid = $(this).parents('tr').find('.productid').text();
+    var orderid = $('.orderid').text();
+    var qty = $(this).parents('tr').find('.productqty').text();
+    var price = $(this).parents('tr').find('.productprice').text();
+    var line = $(this).closest('tr');
+
+    var  sucs = false;
+
+    $.ajax({
+        type: "GET",
+        url: url,
+        line: line,
+        data: {"order_id": orderid, 'product_id': productid},
+        success: function (response) {
+            //console.log(response);
+            var totalqty = $('#order-qty').val() - qty;
+            $('#order-qty').val(totalqty);
+            var totalsum = $('#order-sum').val() - price * qty;
+            $('#order-sum').val(totalsum);
+            this.line.remove();
+            sucs = true;
+            console.log(sucs);
+        },
+        error: function (jqXHR, status, e) {
+            console.log('ошибка ');
+        }
+    });
+    console.log(sucs);
+    if (sucs) {
+      // $(this).closest('tr').remove(); 
+    }
+
+});
+
+
+/*Загрузка определенных категорий watsons*/
 $('.watsonsdownload').on('click', function (e) {
     e.preventDefault();
     var url = $(this).attr('href');
     var res = $('.downloadResult');
     var inputurl = $('.inputurl').val();
     console.log(inputurl);
-   // return;
-    
+    // return;
+
     $.ajax({
         type: "GET",
         url: url,
@@ -22,7 +66,7 @@ $('.watsonsdownload').on('click', function (e) {
         success: function (response) {
             //res.append("<p>response</p>");
             res.append(response);
-          //  console.log(response);
+            //  console.log(response);
         },
         error: function (jqXHR, status, e) {
             //alert('error!');
@@ -89,6 +133,7 @@ $('.change-wproduct').on('click', function (e) {
         $(this).parent().find('.prename').css('visibility', 'hidden');
         $(this).parent().find('input').select();
 
+
     } else {
         $(this).parent().find('.glyphicon').addClass('glyphicon-pencil').removeClass('glyphicon-ok');
         $(this).parent().find('input').attr('readonly', true);
@@ -96,13 +141,16 @@ $('.change-wproduct').on('click', function (e) {
         $(this).parent().find('.prename').css('visibility', 'visible');
     }
 });
-
-/*Живой поиск товаров конкурента watsons*/
-$(".wsearch").keyup(function () {
+$(".wsearch").on('input', function () {
+    // alert($(this).val());
     var search = $(this).val(); //получаем значение в строке поиска
+    console.log('search ' + search);
+    console.log('text ' + $(this).text());
+
     var res = $(this).parent().find('.wresSearch'); //находим необходимый div для результатов поиска
     if (search.length > 1)
     {
+        console.log('keyup' + search);
 
         $.ajax({
             type: "GET",
@@ -111,6 +159,7 @@ $(".wsearch").keyup(function () {
             cache: false,
             success: function (response) {
                 $(res).html(response);
+                console.log(res);
             },
             error: function () {
                 //alert('error!');
@@ -121,8 +170,39 @@ $(".wsearch").keyup(function () {
         //$('.wresSearch').css("z-index", "-1");
     }
     return false;
-
 });
+
+/*Живой поиск товаров конкурента watsons*/
+//$(".wsearch").keyup(function () {
+//    var search = $(this).val(); //получаем значение в строке поиска
+//    console.log('search ' + search);
+//    console.log('text ' + $(this).text());
+//
+//    var res = $(this).parent().find('.wresSearch'); //находим необходимый div для результатов поиска
+//    if (search.length > 1)
+//    {
+//        console.log('keyup' + search);
+//
+//        $.ajax({
+//            type: "GET",
+//            url: "/admin/catman/live-search",
+//            data: {"wsearch": search},
+//            cache: false,
+//            success: function (response) {
+//                $(res).html(response);
+//                console.log(res);
+//            },
+//            error: function () {
+//                //alert('error!');
+//                console.log('ошибка ' + search);
+//            }
+//        });
+//    } else {
+//        //$('.wresSearch').css("z-index", "-1");
+//    }
+//    return false;
+//
+//});
 //jQuery(document).ready(function ($) {
 //    $(function () {
 //        $(".wsearch").focus(function () {
@@ -167,7 +247,7 @@ $(function () {
 
 $(function () {
 
-    $('#my_form').on('submit', function (e) {
+    $('#my_form1').on('submit', function (e) {
         e.preventDefault();
         var $that = $(this),
                 formData = new FormData($that.get(0)); // создаем новый экземпляр объекта и передаем ему нашу форму

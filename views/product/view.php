@@ -6,7 +6,7 @@ use yii\widgets\DetailView;
 /* @var $this yii\web\View */
 /* @var $model app\models\Product */
 
-$this->title = $product->product_id;
+$this->title = $product->id;
 $this->params['breadcrumbs'][] = ['label' => 'Products', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
@@ -24,25 +24,63 @@ $this->params['breadcrumbs'][] = $this->title;
 
             <div class="col-lg-9 col-md-9 col-sm-9">
                 <div class="product-information"><!--/product-information-->
-                    <h2><?= $product->product_name ?></h2>
-                    <p>Код товара: <?= $product->product_id ?></p>
-                    <?= Html::img("@web/images/products/{$product->img}", ['alt' => $product->product_name, 'height' => '200']) ?>
+                    <h2><?= $product->name ?></h2>
+                    <p>Код товара: <?= $product->id ?></p>
+                    <?php
+                    $mainImg = $product->getImage();
+                    $gallery = $product->getImages();
+                    //debug($mainImg);
+                    //debug($gallery);
+                    ?>
+                    <?= Html::img($mainImg->getUrl('300x'), ['alt' => $product->name, 'height' => '200']) ?>
 
                     <span>
-                            <span><?= $product->price ?></span>
-                            <label>Количество:</label>
-                            <input type="text" value="1" name="qtyy" id="qty" />
-                            <a  href="<?= \yii\helpers\Url::to(['/cart/add', 'id' => $product->product_id]) ?>" 
-                                data-id="<?= $product->product_id ?>" class="btn btn-fefault add-to-cart cart ">
-                                <i class="fa fa-shopping-cart"></i>
-                                Add to cart
-                            </a>
+                        <span><?= $product->price ?></span>
+                        <label>Количество:</label>
+                        <input type="text" value="1" name="qtyy" id="qty" />
+                        <a  href="<?= \yii\helpers\Url::to(['/cart/add', 'id' => $product->id]) ?>" 
+                            data-id="<?= $product->id ?>" class="btn btn-fefault add-to-cart cart ">
+                            <i class="fa fa-shopping-cart"></i>
+                            Add to cart
+                        </a>
                     </span>
+                    <p><b>Цена:</b><?= $product->price ?> </b> </p>
 
                     <p><b>Бренд:</b><a href="<?= \yii\helpers\Url::to(['category/view', 'id' => $product->category->cat_id]) ?>" >
                             <?= $product->brand->brand_name ?> </a> </p>
                     <p><b>Категория:</b><a href="<?= \yii\helpers\Url::to(['category/view', 'id' => $product->category->cat_id]) ?>" >
                             <?= $product->category->cat_name ?> </a> </p>
+
+
+                    <div id="gallery-carousel" class="carousel slide">
+                        <div class="carousel-inner" role="listbox">
+                            <?php
+                            $count = count($gallery);
+                            $i = 0;
+                            foreach ($gallery as $img):
+                                ?>
+                                <?php if ($i % 3 == 0): ?>
+                                    <div class="carousel-item <?php if ($i == 0) echo "active" ?>  ">
+                                    <?php endif; ?>  
+                                    <a href=""><?= Html::img($img->getUrl('100x'), ['alt' => $product->name]) ?> </a>
+                                    <?php
+                                    $i++;
+                                    if ($i % 3 == 0 || $i == $count):
+                                        ?>
+                                    </div>
+                                <?php endif; ?>
+                            <?php endforeach; ?>
+
+                        </div>
+                        <a class="carousel-control-prev"  role="button" href="gallery-carousel" data-slide="prev">
+                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                            <span class="sr-only">Previous</span>
+                        </a>
+                        <a class="carousel-control-next" role="button" href="gallery-carousel" data-slide="next">
+                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                            <span class="sr-only">Next</span>
+                        </a>
+                    </div>
                     <?= $product->description ?>
                 </div><!--/product-information-->
             </div><!--/product-details-->

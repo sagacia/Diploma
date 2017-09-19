@@ -16,19 +16,29 @@ $this->params['breadcrumbs'][] = $this->title;
     <p>
         <?= Html::a('Create Product', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
-    <?= GridView::widget([
+    <?=
+    GridView::widget([
         'dataProvider' => $dataProvider,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
-
-            'product_id',
-            'category_id',
-            'brand_id',
-            'product_name',
+            'id',
+            //'category_id',
+            ['attribute' => 'category_id',
+                'value' => function($data) {
+                    return isset($data->category->cat_name) ? $data->category->cat_name : '';
+                }
+            ],
+           // 'brand_id',
+            ['attribute' => 'brand_id',
+                'value' => function($data) {
+                    return isset($data->brand->brand_name) ? $data->brand->brand_name : '';
+                }
+            ],
+            'name',
             'img',
             // 'description',
-
             ['class' => 'yii\grid\ActionColumn'],
         ],
-    ]); ?>
+    ]);
+    ?>
 </div>

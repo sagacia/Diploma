@@ -57,31 +57,27 @@ AppAsset::register($this);
                     <span  class="icon-bar"></span>
                     <span  class="icon-bar"></span>
                 </button>
-                <a href="#" class="navbar-brand">Koсмо</a>
+                <a href="<?= \yii\helpers\Url::home() ?>" class="navbar-brand">Koсмо</a>
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav navbar-right">
-                    <li class="active"><a href="#">Компания</a></li>
-                    <li ><a href="#">Управление</a></li>
                     <li ><a href="#">Каталог</a></li>
-                    <li ><a href="#">Дисконтная программа</a></li>
                     <li ><a href="#">Магазины</a></li>
                     <?php if (!Yii::$app->user->isGuest): ?>
                         <li > 
-                                <?= Html::beginForm(['/site/logout'], 'post') ?>
-                                <?=
-                                Html::submitButton(
-                                        '<a href=#>Logout (' . Yii::$app->user->identity->username . ')</a>', ['class' => 'btn btn-link logout']
-                                )
-                                ?> 
-                            
-                                <?= Html::endForm() ?>
-                            
+                            <?= Html::beginForm(['/site/logout'], 'post') ?>
+                            <?=
+                            Html::submitButton(
+                                    '<a href=#>Logout (' . Yii::$app->user->identity->username . ')</a>', ['class' => 'btn btn-link logout']
+                            )
+                            ?> 
+
+                            <?= Html::endForm() ?>
+
                         </li>
                     <?php else: ?>
-                        <li ><a href="<?= yii\helpers\Url::to(['site/login']) ?>">Вход</a></li>
+                        <li ><a href="<?= yii\helpers\Url::to(['/site/login']) ?>">Вход</a></li>
                     <?php endif; ?>
-                    <li><a href="<?= yii\helpers\Url::to(['/site/logout']) ?>">выйти</a></li>
                     <li ><a href="#"><i class="fa fa-envelope-o" aria-hidden="true"></i></a></li>
                 </ul>
             </div>
@@ -144,7 +140,14 @@ AppAsset::register($this);
     </div>
 
 
-    <div class="container"> 
+    <div class="container">
+        <?php if (Yii::$app->session->hasFlash('success')): ?>
+            <div class="alert alert-success alert-dismissible" role="alert">
+                <button type="button" class="close" data-dismiss="alert" area-label="close">
+                    <span aria-hidden="true">&times;</span></button>
+                <?php echo Yii::$app->session->getFlash('success') ?>
+            </div>    
+        <?php endif; ?>
         <?= $content; ?>
     </div>
 

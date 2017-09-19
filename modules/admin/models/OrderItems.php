@@ -35,7 +35,7 @@ class OrderItems extends \yii\db\ActiveRecord
         return [
             [['order_id', 'product_id', 'product_name', 'qty_item', 'price', 'sum_item'], 'required'],
             [['order_id', 'product_id', 'qty_item'], 'integer'],
-            [['price', 'sum_item'], 'number'],
+            [['price', 'sum_item'], 'double'],
             [['product_name'], 'string', 'max' => 255],
             [['order_id'], 'exist', 'skipOnError' => true, 'targetClass' => Order::className(), 'targetAttribute' => ['order_id' => 'id']],
         ];

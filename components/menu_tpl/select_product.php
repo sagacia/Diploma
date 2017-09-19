@@ -1,9 +1,9 @@
 <option 
-    value="<?= $category['id'] ?>" 
-    <?php if($category['id'] == $this->model->category_id) echo 'selected' ?>
+    value="<?= $category['cat_id'] ?>" 
+    <?php if($category['cat_id'] == $this->model->category_id) echo 'selected' ?>
    
         >
-    <?= $tab . $category['name'] ?></option>
+    <?= $tab . $category['cat_name'] ?></option>
 
  <?php if( isset($category['childs']) ): ?>
             <ul>

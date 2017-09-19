@@ -6,15 +6,26 @@ use yii\base\Model;
 
 class Cart extends \yii\db\ActiveRecord {
 
+    public function behaviors() {
+        return [
+            'image' => [
+                'class' => 'rico\yii2images\behaviors\ImageBehave',
+            ]
+        ];
+    }
+
     public function addToCart($product, $qty = 1) {
-        if (isset($_SESSION['cart'][$product->product_id])) {
-            $_SESSION['cart'][$product->product_id]['qty']+=$qty;
+        $mainImg = $product->getImage();
+       // debug($mainImg->$getUrl);die;
+       // return;
+        if (isset($_SESSION['cart'][$product->id])) {
+            $_SESSION['cart'][$product->id]['qty']+=$qty;
         } else {
-            $_SESSION['cart'][$product->product_id] = [
+            $_SESSION['cart'][$product->id] = [
                 'qty' => $qty,
-                'name' => $product->product_name,
+                'name' => $product->name,
                 'price' => $product->price,
-                'img' => $product->img
+                'img' => $mainImg->getUrl('x50')
             ];
         }
         $_SESSION['cart.qty'] = isset($_SESSION['cart.qty']) ? $_SESSION['cart.qty']+= $qty : $qty;
@@ -26,7 +37,7 @@ class Cart extends \yii\db\ActiveRecord {
 
     public function recalc($id) {
         if (!isset($_SESSION['cart'][$id])) {
-           // echo $_SESSION['cart'][$id];
+            // echo $_SESSION['cart'][$id];
             return false;
         }
         $qtyMinus = $_SESSION['cart'][$id]['qty'];

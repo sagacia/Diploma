@@ -33,7 +33,18 @@ $this->params['breadcrumbs'][] = $this->title;
         <button type="button" class="close" data-dismiss="alert" area-label="close">
             <span aria-hidden="true">&times;</span></button>
 
-    </div>    
+    </div>
+    <div>
+        <h3>Формат загрузки</h3>
+       
+        <table class="table">
+            <thead>
+                <tr>
+                            <?= $tablestructure ?>
 
+                </tr>
+            </thead>
+        </table>
+    </div>    
 
 </div>

@@ -16,7 +16,7 @@ AppAsset::register($this);
         <meta charset="<?= Yii::$app->charset ?>">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <?= Html::csrfMetaTags() ?>
-        <title><?php //Html::encode($this->title)               ?></title>
+        <title><?php //Html::encode($this->title)                  ?></title>
         <?php $this->head() ?>
     </head>
     <body>
@@ -60,7 +60,7 @@ AppAsset::register($this);
             </div>
 
             <!--<div id="menu" class="container-fluid">-->
-            <div id="menu" class="container">
+            <div id="menu" class="container-fluid">
 
                 <div class="navbar-header">
                     <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
@@ -72,13 +72,12 @@ AppAsset::register($this);
                 </div>
                 <div class="navbar-collapse collapse">
                     <ul class="nav navbar-nav navbar-right">
-                        <li class="active"><a href="">Компания</a></li>
 
 
-                        <li ><a href="<?= \yii\helpers\Url::to(['/category/index']) ?>">Категории</a></li>
-                        <li ><a href="#">Каталог</a></li>
-                        <li ><a href="#">Дисконтная программа</a></li>
-                        <li ><a href="#">Магазины</a></li>
+                        <li ><a href="<?= \yii\helpers\Url::to(['/category/index']) ?>">Каталог</a></li>
+                        <li ><a href="<?= \yii\helpers\Url::to(['/site/stores']) ?>">Магазины</a></li>
+                        <li ><a href="<?= \yii\helpers\Url::to(['/site/contacts']) ?>">Контакты</a></li>
+
                         <li ><a href="#" onclick="return getCartModal()">Корзина</a></li>
                         <!--<li ><a href="<?= \yii\helpers\Url::to(['/cart/showcart']) ?>">Корзина</a></li>-->
 
@@ -98,7 +97,9 @@ AppAsset::register($this);
                         <?php else: ?>
                             <li ><a href="<?= yii\helpers\Url::to(['site/login']) ?>">Вход</a></li>
                         <?php endif; ?>
-                        <li ><a href="<?= yii\helpers\Url::to(['site/signup']) ?>">Регистрация</a></li>
+                        <?php if (Yii::$app->user->isGuest): ?>
+                            <li ><a href="<?= yii\helpers\Url::to(['site/signup']) ?>">Регистрация</a></li>
+                        <?php endif; ?>
 
                         <li ><a href="#"><i class="fa fa-envelope-o" aria-hidden="true"></i></a></li>
                     </ul>

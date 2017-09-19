@@ -163,6 +163,16 @@ class SiteController extends AppController {
                     'model' => $model,
         ]);
     }
+    
+    public function actionContacts() {
+        
+        return $this->render('contacts');
+    }
+    
+     public function actionStores() {
+        
+        return $this->render('stores');
+    }
 
     /**
      * Displays about page.
