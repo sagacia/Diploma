@@ -25,6 +25,7 @@ class AppAsset extends AssetBundle {
         'css/bootstrap.min.css',
         'css/font-awesome.css',
         'css/test.css',
+        'css/override.css'
     ];
     public $js = [
         "js/jquery.cookie.js",
