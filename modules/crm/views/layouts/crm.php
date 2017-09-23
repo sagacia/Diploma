@@ -112,38 +112,15 @@ AppAsset::register($this);
             <!--</button>-->
             <p></p>
         </div>
+        <div class="btn-group  ">
+            <!--<button class="btn btn-warning dropdown-toggle" data-toggle="dropdown" >-->
+            <a class="btn btn-warning " href="<?= \yii\helpers\Url::to(['/crm/dw/communication']) ?>" class="active">Коммуникация</a>
+            <span ></span>
+            <!--</button>-->
+            <p></p>
+        </div>
 
-        <div class="btn-group dropdown">
-            <button class="btn btn-warning dropdown-toggle" data-toggle="dropdown">Категории <span class="caret"></span></button><p></p>
-            
-            <ul class="dropdown-menu">
-                <li><a href="<?= \yii\helpers\Url::to(['category/index']) ?>">Список категорий</a></li>
-                <li><a href="<?= \yii\helpers\Url::to(['category/create']) ?>">Добавить категорию</a></li>
-                <li role="separator" class="divider"></li>
-                <li ><a href="<?= yii\helpers\Url::to(['/admin/default/catload']) ?>"  > Загрузить категории из файла</a></li>
-
-            </ul></div>
-
-        <div class="btn-group dropdown">
-            <button class="btn btn-warning dropdown-toggle" data-toggle="dropdown">Бренды <span class="caret"></span></button><p></p>
-            <ul class="dropdown-menu">
-                <li><a href="<?= \yii\helpers\Url::to(['brand/index']) ?>">Список брендов</a></li>
-                <li><a href="<?= \yii\helpers\Url::to(['brand/create']) ?>">Добавить бренд</a></li>
-                <li role="separator" class="divider"></li>
-                <li ><a href="<?= yii\helpers\Url::to(['/admin/default/brandload']) ?>"  > Загрузить бренды из файла</a></li>
-
-            </ul></div>
-
-
-        <div class="btn-group dropdown">
-            <button class="btn btn-warning dropdown-toggle" data-toggle="dropdown">Товары <span class="caret"></span></button><p></p>
-            <ul class="dropdown-menu">
-                <li><a href="<?= \yii\helpers\Url::to(['product/index']) ?>">Список товаров</a></li>
-                <li role="separator" class="divider"></li>
-                <li ><a href="<?= yii\helpers\Url::to(['/admin/default/productload']) ?>"  > Загрузить товары из файла</a></li>
-                <li ><a class='productsDel' href='#'  > Удалить все товары</a></li>
-
-            </ul></div>
+        
 
 
     </div>

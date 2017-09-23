@@ -9,22 +9,13 @@ use yii\helpers\Html;
 //$this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="container">
-    дат <?php debug($start); ?>
-    интервал <?php
-    debug($interval);
-    echo 'дата формат ';
-    echo date("Y-m-d", strtotime($start));
-    echo '<br>';
-     echo date('Y-m-d');
-    ?>
+    
 
     <form action="/crm/dw/calcseg" name="calcseg" method="get">
 
-        <p><input type="date" name="datestart"  value="<?php echo date('Y-m-d', strtotime($end)); ?> ">Начало периода
-        <p><input type="date" name="datestart2" value="<?php echo date("Y-m-d", $start) ?> ">Начало периода
+        <p><input type="date" name="datestart" value="<?php if(isset($start)) echo date('Y-m-d', strtotime($start)); else echo date('Y-m-d'); ?>">Начало периода
 
-        <p><input type="date" name="dateend" value="2017-05-01">Конец периода
-        <p><input type="date" name="dateend" value="<?php echo date('Y-m-d', strtotime($end)); ?>">Конец периода
+        <p><input type="date" name="dateend"   value="<?php if(isset($end)) echo date('Y-m-d', strtotime($end)); else echo date('Y-m-d');  ?>"> Конец периода
 
         <p><input type="input" name="interval" value="4">Интервал
         <p><input type="submit"></p>

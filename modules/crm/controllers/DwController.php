@@ -8,6 +8,7 @@ use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use app\models\Product;
 
 /**
  * DwController implements the CRUD actions for Dw model.
@@ -34,37 +35,131 @@ class DwController extends Controller {
         $interval = Yii::$app->request->get('interval');
 //        debug($start);
 //        debug($end);
-        debug($interval);
+        //  debug($interval);
         if ($start > $end) {
             Yii::$app->session->setFlash('notification', 'Конечная дата не может быть больше начальной');
-              return $this->render('calcform', compact('start', 'end', 'interval'));
-
+            return $this->render('calcform', compact('start', 'end', 'interval'));
         }
         if (!isset($start) || !isset($end) || !isset($interval)) {
-            debug($start);
-//  return $this->render('calcform', compact('start', 'end', 'interval'));
-            return $this->render('calcform', ['start'=>$start, 'end'=>$end, 'interval'=>$interval]);
+            return $this->render('calcform', compact('start', 'end', 'interval'));
+            //  return $this->render('calcform', ['start'=>$start, 'end'=>$end, 'interval'=>$interval]);
+        }
+
+        $exists = Dw::find()
+                ->select(['segment'])
+                ->where('periodstart = ' . $start . ' and periodend = ' . $end)
+                ->count();
+        if ($exists != 0) {
+
+            Yii::$app->session->setFlash('notification', 'За этот период сегменты уже расчитаны');
+            return $this->render('calcform', compact('start', 'end', 'interval'));
         }
 
         $query = \Yii::$app->db->createCommand("CALL calculateSegments('" . $start . "','" . $end . "'," . $interval . ")")
                 ->execute();
 
-        return $this->render('calc', compact('res'));
+        Yii::$app->session->setFlash('notification', 'Сегменты готовы');
+        return $this->render('calcform', compact('start', 'end', 'interval'));
     }
 
     public function actionViewseg() {
+        $maxend = DW::find()->orderBy('periodend desc')->one();
 
         $segments = Dw::find()
                         ->select(['segment', 'count(email) as cnt'])
-                        //->where('approved = 1')
+                        ->where('periodend ="' . $maxend['periodend'] . '"')
                         ->groupBy(['segment'])
                         ->createCommand()->queryAll();
 
-        $totalemails = Dw::find()->count();
 
 
-
+        $totalemails = Dw::find()->where('periodend ="' . $maxend['periodend'] . '"')->count();
         return $this->render('viewseg', compact('segments', 'totalemails'));
+    }
+
+    public function actionCommunication() {
+
+        $maxend = DW::find()->orderBy('periodend desc')->one();
+
+        $segments = Dw::find()
+                        ->select(['segment'])
+                        ->distinct()
+                        ->where('periodend ="' . $maxend['periodend'] . '"')
+                        // ->groupBy(['segment'])
+                        ->createCommand()->queryAll();
+
+        $categories = Product::find()
+                ->select(['category_id', 'category.cat_name'])
+                ->leftJoin('category', '`product`.`category_id` = `category`.`cat_id`')
+                ->distinct()
+                ->where('category.cat_name is not null')
+                ->orderBy('category.cat_name ASC')
+                ->createCommand()
+                ->queryAll();
+
+        // debug($categories);
+        //return;
+
+
+
+        $totalemails = Dw::find()->where('periodend ="' . $maxend['periodend'] . '"')->count();
+        return $this->render('communication', compact('segments', 'categories', 'totalemails'));
+    }
+
+    public function actionPreproposal($segstr, $catstr) {
+        //$selectedCategoriess = Yii::$app->request->get('catstr');
+        //echo 'ok'; return;
+        $segstr = substr($segstr, 0, -1);
+        $catstr = substr($catstr, 0, -1);
+
+        $maxend = DW::find()->orderBy('periodend desc')->one();
+        $where = 'periodend ="' . $maxend['periodend'] . '"';
+        if (!empty($segstr)) {
+            $segin = '';
+            $segarr = explode(',', $segstr);
+            foreach ($segarr as $seg) {
+                $segin .= '"' . $seg . '",';
+            }
+            $segin = substr($segin, 0, -1);
+
+            $where .= ' and dw.segment in (' . $segin . ')';
+        }
+
+        if (!empty($catstr))
+            $where .= ' and category.cat_id in ("' . $catstr . '")';
+        // debug($where);
+
+        $query = Dw::find()
+                ->select(['dw.segment, count(distinct dw.email)'])
+                ->distinct()
+                ->leftJoin('order', '`dw`.`email` = `order`.`email`')
+                ->leftJoin('order_items', '`order`.`id` = `order_items`.`order_id`')
+                ->leftJoin('product', '`order_items`.`product_id` = `product`.`id`')
+                ->leftJoin('category', '`product`.`category_id` = `category`.`cat_id`')
+                ->where($where)
+                ->groupBy('dw.segment')
+                ->createCommand()->queryAll();
+        $emails = Dw::find()
+                        ->select(['dw.email'])
+                        ->distinct()
+                        ->leftJoin('order', '`dw`.`email` = `order`.`email`')
+                        ->leftJoin('order_items', '`order`.`id` = `order_items`.`order_id`')
+                        ->leftJoin('product', '`order_items`.`product_id` = `product`.`id`')
+                        ->leftJoin('category', '`product`.`category_id` = `category`.`cat_id`')
+                        ->where($where)
+                        //->groupBy('dw.segment')
+                        ->createCommand()->queryAll();
+        debug($emails);
+
+        debug($query);
+        return;
+
+
+
+
+
+        $totalemails = Dw::find()->where('periodend ="' . $maxend['periodend'] . '"')->count();
+        return $this->render('communication', compact('segments', 'categories', 'totalemails'));
     }
 
     public function actionIndex() {

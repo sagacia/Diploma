@@ -4,6 +4,49 @@
 //});
 
 
+/*просмотр перед предложением*/
+$('.preproposal').on('click', function (e) {
+    e.preventDefault();
+    var url = $(this).attr('href');
+    var res = $('.result');
+   // var segments = $('.segments').find('input:checked'); //записываем новое имя
+    var segstr = '';
+    var segments = $('.segments').find('input:checked').each(function () {
+        segstr+=$(this).data('seg')+',';
+        //console.log('val ' + $(this).data('seg'));
+    });
+    
+    var catstr = '';
+    var categories = $('.categories').find('input:checked').each(function () {
+        segstr+=$(this).data('catid')+',';
+       // console.log('val ' + $(this).data('catid'));
+    });
+          //  console.log(segstr);
+           // res.html(segstr);
+
+    //return;
+    $.ajax({
+        type: "GET",
+        url: url,
+        timeout: 216000,
+        data: {"segstr": segstr,
+        "catstr": catstr,},
+        success: function (response) {
+            //res.append("<p>response</p>");
+           res.append(response);
+            //  console.log(response);
+        },
+        error: function (jqXHR, status, e) {
+            //alert('error!');
+            if (status === "timeout") {
+                alert("Время ожидания ответа истекло!");
+            }
+            console.log('ошибка ');
+        }
+    });
+
+});
+
 
 
 
@@ -18,7 +61,7 @@ $('.del-item-order').on('click', function (e) {
     var price = $(this).parents('tr').find('.productprice').text();
     var line = $(this).closest('tr');
 
-    var  sucs = false;
+    var sucs = false;
 
     $.ajax({
         type: "GET",
@@ -41,7 +84,7 @@ $('.del-item-order').on('click', function (e) {
     });
     console.log(sucs);
     if (sucs) {
-      // $(this).closest('tr').remove(); 
+        // $(this).closest('tr').remove(); 
     }
 
 });
