@@ -20,16 +20,9 @@ use yii\widgets\ActiveForm;
         </div>    
     <?php endif; ?>
     <div class="row">
-        <div class="col-lg-9 col-md-9 col-sm9">
+        
             <div class="result">Результат
 
-            </div>
-        </div>
-        <div class="col-lg-3 col-md-3 col-sm-3">
-            <div class="emails">Emails
-                
-            </div>
-        </div>
 
     </div>
     <div class="container">      

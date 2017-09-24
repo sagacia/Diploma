@@ -9,6 +9,7 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use app\models\Product;
+use app\modules\crm\models\Proposal;
 
 /**
  * DwController implements the CRUD actions for Dw model.
@@ -111,7 +112,6 @@ class DwController extends Controller {
         //echo 'ok'; return;
         $segstr = substr($segstr, 0, -1);
         $catstr = substr($catstr, 0, -1);
-
         $maxend = DW::find()->orderBy('periodend desc')->one();
         $where = 'periodend ="' . $maxend['periodend'] . '"';
         if (!empty($segstr)) {
@@ -121,26 +121,24 @@ class DwController extends Controller {
                 $segin .= '"' . $seg . '",';
             }
             $segin = substr($segin, 0, -1);
-
             $where .= ' and dw.segment in (' . $segin . ')';
         }
 
         if (!empty($catstr))
             $where .= ' and category.cat_id in ("' . $catstr . '")';
-        // debug($where);
 
         $query = Dw::find()
-                ->select(['dw.segment, count(distinct dw.email)'])
-                ->distinct()
-                ->leftJoin('order', '`dw`.`email` = `order`.`email`')
-                ->leftJoin('order_items', '`order`.`id` = `order_items`.`order_id`')
-                ->leftJoin('product', '`order_items`.`product_id` = `product`.`id`')
-                ->leftJoin('category', '`product`.`category_id` = `category`.`cat_id`')
-                ->where($where)
-                ->groupBy('dw.segment')
-                ->createCommand()->queryAll();
+                        ->select(['dw.segment, count(distinct dw.email) as cnt'])
+                        ->distinct()
+                        ->leftJoin('order', '`dw`.`email` = `order`.`email`')
+                        ->leftJoin('order_items', '`order`.`id` = `order_items`.`order_id`')
+                        ->leftJoin('product', '`order_items`.`product_id` = `product`.`id`')
+                        ->leftJoin('category', '`product`.`category_id` = `category`.`cat_id`')
+                        ->where($where)
+                        ->groupBy('dw.segment')
+                        ->createCommand()->queryAll();
         $emails = Dw::find()
-                        ->select(['dw.email'])
+                        ->select(['dw.email', 'dw.segment'])
                         ->distinct()
                         ->leftJoin('order', '`dw`.`email` = `order`.`email`')
                         ->leftJoin('order_items', '`order`.`id` = `order_items`.`order_id`')
@@ -149,17 +147,17 @@ class DwController extends Controller {
                         ->where($where)
                         //->groupBy('dw.segment')
                         ->createCommand()->queryAll();
-        debug($emails);
+        //  debug($emails);
+        //  debug($query);
+        //  return;
 
-        debug($query);
-        return;
-
-
-
+        $proposals = Proposal::find()->all();
 
 
         $totalemails = Dw::find()->where('periodend ="' . $maxend['periodend'] . '"')->count();
-        return $this->render('communication', compact('segments', 'categories', 'totalemails'));
+        //$this->layout = null; //а я его тут убираю...
+        // die(var_dump($this));
+        return $this->renderPartial('preproposal', compact('query', 'emails', 'totalemails', 'proposals'));
     }
 
     public function actionIndex() {
@@ -170,6 +168,22 @@ class DwController extends Controller {
         return $this->render('index', [
                     'dataProvider' => $dataProvider,
         ]);
+    }
+
+    public function actionSendemails($emails, $proposalid) {
+        echo 'пришли emails';
+        $qproposal = Proposal::find($proposalid)->one();
+        $emails = substr($emails, 0, -1);
+        $emailss = explode(',', $emails);
+        echo $qproposal->message;
+        foreach ($emailss as $em) {
+             Yii::$app->mailer->compose('proposal', compact('qproposal'))
+                        ->setFrom(['test@mail.tt'=>'Предложение от Космо'])
+                        ->setTo($em) //продублировать для администратора Yii::$app->params['adminEmail']
+                        ->setSubject('Предложение от Космо')
+                        ->send();
+            
+        }
     }
 
     /**

@@ -3,37 +3,102 @@
 //    alert('main');
 //});
 
+/*отправка email с предложением*/
+$('.result').on('click', '.sendemails', function (e) {
+
+    e.preventDefault();
+    var url = $(this).attr('href');
+
+    var emails = '';
+    var proposalid = $('.proposal').find("select option:selected").val();
+    var res = $('.result');
+
+    var segments = $('.emails').find('input:checked').each(function () {
+        emails += $(this).data('email') + ',';
+    });
+    console.log('emails ' + emails);
+    console.log('url ' + url);
+    console.log('proposal ' + proposalid);
+
+
+           // return;
+
+    $.ajax({
+        type: "GET",
+        url: url,
+        timeout: 216000,
+        data: {"emails": emails, 
+        "proposalid": proposalid,},
+        success: function (response) {
+            res.append(response);
+            //  console.log(response);
+        },
+        error: function (jqXHR, status, e) {
+            //alert('error!');
+            if (status === "timeout") {
+                alert("Время ожидания ответа истекло!");
+            }
+            console.log('ошибка ');
+        }
+    });
+
+});
+
+/*Выбор для отправки по сегментам - делегируем, так как создается динамически*/
+$('.result').on('click', '.segment', function (e) {
+    var segment = $(this).data('segr');
+
+    if ($(this).attr('checked') == 'checked')
+    {
+        console.log(1);
+
+        $(this).removeAttr("checked");
+        // $('input[data-segemail=' + segment + ']').attr('checked', 'checked');
+        $('input[data-segemail=' + segment + ']').removeAttr("checked");
+        //$('input[data-segemail=' + segment + ']').attr('checked', 'checked');
+        // $('.segments').attr('checked', true);
+
+
+    } else {
+        $(this).attr('checked', 'checked');
+
+
+        //$('.segments').attr('checked', true);
+        $('input[data-segemail=' + segment + ']').attr('checked', 'checked');
+        //$('input[data-segemail=' + segment + ']').removeAttr("checked");
+    }
+});
+
+
 
 /*просмотр перед предложением*/
 $('.preproposal').on('click', function (e) {
     e.preventDefault();
     var url = $(this).attr('href');
     var res = $('.result');
-   // var segments = $('.segments').find('input:checked'); //записываем новое имя
     var segstr = '';
     var segments = $('.segments').find('input:checked').each(function () {
-        segstr+=$(this).data('seg')+',';
+        segstr += $(this).data('seg') + ',';
         //console.log('val ' + $(this).data('seg'));
     });
-    
+    //console.log('segstr ' + segstr);
+
     var catstr = '';
     var categories = $('.categories').find('input:checked').each(function () {
-        segstr+=$(this).data('catid')+',';
-       // console.log('val ' + $(this).data('catid'));
+        catstr += $(this).data('catid') + ',';
     });
-          //  console.log(segstr);
-           // res.html(segstr);
+    //console.log('val ' + $(this).data('catid'));
+    // console.log('catstr '+catstr);
 
-    //return;
     $.ajax({
         type: "GET",
         url: url,
         timeout: 216000,
         data: {"segstr": segstr,
-        "catstr": catstr,},
+            "catstr": catstr, },
         success: function (response) {
             //res.append("<p>response</p>");
-           res.append(response);
+            res.append(response);
             //  console.log(response);
         },
         error: function (jqXHR, status, e) {
