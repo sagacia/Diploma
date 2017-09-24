@@ -60,20 +60,23 @@ AppAsset::register($this);
                 <a href="<?= \yii\helpers\Url::home() ?>" class="navbar-brand">Koсмо</a>
             </div>
             <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav navbar-right">
+                <ul class="nav navbar-nav navbar-right">   
+                    <li ><a href="<?= yii\helpers\Url::to(['/admin/catman']) ?>">Ценообразование</a></li>
+                    <li ><a href="<?= yii\helpers\Url::to(['/admin']) ?>">Админ</a></li>
+
                     <li ><a href="#">Каталог</a></li>
                     <li ><a href="#">Магазины</a></li>
                     <?php if (!Yii::$app->user->isGuest): ?>
                         <li > 
-                                <?= Html::beginForm(['/site/logout'], 'post') ?>
-                                <?=
-                                Html::submitButton(
-                                        '<a href=#>Logout (' . Yii::$app->user->identity->username . ')</a>', ['class' => 'btn btn-link logout']
-                                )
-                                ?> 
-                            
-                                <?= Html::endForm() ?>
-                            
+                            <?= Html::beginForm(['/site/logout'], 'post') ?>
+                            <?=
+                            Html::submitButton(
+                                    '<a href=#>Logout (' . Yii::$app->user->identity->username . ')</a>', ['class' => 'btn btn-link logout']
+                            )
+                            ?> 
+
+                            <?= Html::endForm() ?>
+
                         </li>
                     <?php else: ?>
                         <li ><a href="<?= yii\helpers\Url::to(['site/login']) ?>">Вход</a></li>
@@ -135,7 +138,7 @@ AppAsset::register($this);
                 <li ><a class='productsDel' href='#'  > Удалить все товары</a></li>
 
             </ul></div>
-                
+
         <div class="btn-group  ">
             <!--<button class="btn btn-warning dropdown-toggle" data-toggle="dropdown" >-->
             <a class="btn btn-warning " href="<?= \yii\helpers\Url::to(['/admin/catman']) ?>" class="active">Цены конкурентов</a>
@@ -143,7 +146,7 @@ AppAsset::register($this);
             <!--</button>-->
             <p></p>
         </div>
-        
+
         <div class="btn-group  ">
             <!--<button class="btn btn-warning dropdown-toggle" data-toggle="dropdown" >-->
             <a class="btn btn-warning " href="<?= \yii\helpers\Url::to(['/admin/watsons/load']) ?>" class="active">Загрузить Watsons</a>
@@ -151,7 +154,7 @@ AppAsset::register($this);
             <!--</button>-->
             <p></p>
         </div>
-        
+
 
 
     </div>

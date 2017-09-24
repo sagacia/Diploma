@@ -66,6 +66,7 @@ $config = [
         ],
         'crm' => [
             'class' => 'app\modules\crm\Module',
+            'defaultRoute' => 'dw/communication'
         ],
         'yii2images' => [
             'class' => 'rico\yii2images\Module',
@@ -99,8 +100,8 @@ $config = [
             'product/*',
             'cart/*',
             'yii2images/*',
-            //'admin/*',
-            //'rbac/*',
+        //'admin/*',
+        //'rbac/*',
         ]
     ],
     'controllerMap' => [

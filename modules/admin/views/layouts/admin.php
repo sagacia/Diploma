@@ -61,6 +61,10 @@ AppAsset::register($this);
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav navbar-right">
+                    <li ><a href="<?= yii\helpers\Url::to(['/admin/catman']) ?>">Ценообразование</a></li>
+
+                    <li ><a href="<?= yii\helpers\Url::to(['/admin']) ?>">Админ</a></li>
+
                     <li ><a href="#">Каталог</a></li>
                     <li ><a href="#">Магазины</a></li>
                     <?php if (!Yii::$app->user->isGuest): ?>
